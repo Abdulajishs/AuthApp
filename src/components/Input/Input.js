@@ -1,21 +1,36 @@
-import React from "react";
-import classes from"./Input.module.css"
-const Input = (props) =>{
+import React, { useRef , useImperativeHandle, forwardRef} from "react";
+import classes from "./Input.module.css"
+
+
+const Input = forwardRef((props,ref) => {
+    const inputRef = useRef()
+
+    const activate = () => {
+        inputRef.current.focus();
+    }
+
+    useImperativeHandle(ref,()=>{
+        return {
+            focus : activate
+        }
+    })
+    
     return (
         <div
-          className={`${classes.control} ${props.isValid === false ? classes.invalid : ''
-            }`}
+            className={`${classes.control} ${props.isValid === false ? classes.invalid : ''
+                }`}
         >
-          <label>{props.label}</label>
-          <input
-            type={props.type}
-            id={props.id}
-            value={props.value}
-            onChange={props.onChange}
-            onBlur={props.onBlur}
-          />
+            <label>{props.label}</label>
+            <input
+                ref={inputRef}
+                type={props.type}
+                id={props.id}
+                value={props.value}
+                onChange={props.onChange}
+                onBlur={props.onBlur}
+            />
         </div>
     )
-}
+})
 
 export default Input;
